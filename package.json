@@ -1,0 +1,29 @@
+{
+  "name": "eventgenie-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EventGenie AI web application and authenticated SQLite backend",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "check": "node --check app.js && node --check server/index.js && node --check server/seed.js && node --check server/chat.js && node --check server/actions.js && node --check server/nvidia.js && node --check scripts/nim-live-check.js && node --check scripts/nim-actions-live-check.js && node --check scripts/chat-live-audit.js",
+    "test": "node --test",
+    "test:nim": "node scripts/nim-live-check.js",
+    "test:nim:actions": "node scripts/nim-actions-live-check.js",
+    "test:chat-live": "node scripts/chat-live-audit.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^12.2.0",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "helmet": "^8.1.0"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.11.1": true
+  }
+}
