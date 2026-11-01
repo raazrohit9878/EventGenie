@@ -6,8 +6,10 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
-    "check": "node --check app.js && node --check server/index.js && node --check server/seed.js && node --check server/chat.js && node --check server/actions.js && node --check server/nvidia.js && node --check scripts/nim-live-check.js && node --check scripts/nim-actions-live-check.js && node --check scripts/chat-live-audit.js",
+    "check": "node --check app.js && node --check server/index.js && node --check server/seed.js && node --check server/chat.js && node --check server/actions.js && node --check server/nvidia.js && node --check functions/index.js && node --check functions/seed.js && node --check functions/chat.js && node --check functions/actions.js && node --check functions/nvidia.js && node --check scripts/nim-live-check.js && node --check scripts/nim-actions-live-check.js && node --check scripts/chat-live-audit.js && npm run format:check",
     "test": "node --test",
+    "format": "prettier --write \"*.html\" \"*.js\" \"*.css\" \"server/**/*.js\" \"functions/**/*.js\" \"scripts/**/*.js\" \"test/**/*.js\"",
+    "format:check": "prettier --check \"*.html\" \"*.js\" \"*.css\" \"server/**/*.js\" \"functions/**/*.js\" \"scripts/**/*.js\" \"test/**/*.js\"",
     "test:nim": "node scripts/nim-live-check.js",
     "test:nim:actions": "node scripts/nim-actions-live-check.js",
     "test:chat-live": "node scripts/chat-live-audit.js",
@@ -29,5 +31,8 @@
   },
   "allowScripts": {
     "better-sqlite3@12.11.1": true
+  },
+  "devDependencies": {
+    "prettier": "^3.9.10"
   }
 }
