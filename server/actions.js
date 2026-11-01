@@ -189,7 +189,7 @@ function clarifyPortalChange(candidate, workspace) {
     if (data.priorities) recap.push(`Priorities/accessibility: ${data.priorities}`);
     const luxuryConflict = data.venueTier && /luxury|5.star|premium/i.test(data.venueTier) && data.budget && data.guests;
     const feasibility = luxuryConflict ? `\nFeasibility note: ${data.currency || '₹'}${Math.round(data.budget / data.guests).toLocaleString('en-IN')} per person may constrain a ${data.venueTier} venue; actual costs depend on local quotations. A boutique venue or reducing decor scope could help.` : '';
-    return `I’ve captured these details:\n${recap.map(line => `- ${line}`).join('\n')}${feasibility}\n${missing.length ? `I still need only: ${missing.join(', ')}.` : 'The required details are complete.'}${data.cateringNotes ? '' : '\nYou can optionally add a catering or menu preference.'}`;
+    return `I’ve captured these details:\n${recap.map(line => `- ${line}`).join('\n')}${feasibility}\n${missing.length ? `${data.type === 'Birthday' ? 'For this birthday, ' : ''}I still need only: ${missing.join(', ')}.` : 'The required details are complete.'}${data.cateringNotes ? '' : '\nYou can optionally add a catering or menu preference.'}`;
   }
   if (candidate.entity === 'task' && candidate.action === 'create' && !dateOk(data.due)) {
     return `I can add that birthday-planning task. What due date should I use? The current event date is ${workspace.event.date || 'not set'}, and I won’t guess a deadline.`;

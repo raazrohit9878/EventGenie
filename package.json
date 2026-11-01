@@ -10,7 +10,11 @@
     "test": "node --test",
     "test:nim": "node scripts/nim-live-check.js",
     "test:nim:actions": "node scripts/nim-actions-live-check.js",
-    "test:chat-live": "node scripts/chat-live-audit.js"
+    "test:chat-live": "node scripts/chat-live-audit.js",
+    "build:public": "powershell -Command \"Copy-Item index.html, styles.css, app.js -Destination public/\"",
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:functions": "firebase deploy --only functions"
   },
   "engines": {
     "node": ">=22"

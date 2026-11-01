@@ -82,7 +82,7 @@ app.use((req, res, next) => {
     if (origin) {
       try { if (new URL(origin).origin !== `${req.protocol}://${req.get('host')}`) return res.status(403).json({ error: 'Cross-site request rejected.' }); }
       catch { return res.status(403).json({ error: 'Invalid request origin.' }); }
-    }
+    } else if (isProduction) return res.status(403).json({ error: 'Request origin is required.' });
   }
   next();
 });
@@ -164,16 +164,19 @@ function validateWorkspace(raw) {
   const e = raw.event;
   if (!e || typeof e !== 'object') return 'Event details are required.';
   if (!cleanText(e.name, 120) || !cleanText(e.location, 160) || !validDate(e.date)) return 'Event name, date, and location are required.';
+  if (cleanText(e.name, 120) !== e.name || cleanText(e.location, 160) !== e.location || !['₹', '$', '€', '£', 'INR', 'USD', 'EUR', 'GBP'].includes(e.currency || '₹')) return 'Event details contain an unsupported value.';
+  for (const key of ['type', 'theme', 'venue', 'venueTier', 'dietary', 'cateringNotes', 'priorities', 'time']) if (typeof e[key] !== 'string' || e[key].length > 300) return `Event ${key} must be text of 300 characters or fewer.`;
   if (!Number.isInteger(Number(e.guests)) || Number(e.guests) < 1 || Number(e.guests) > 100000) return 'Guest count must be between 1 and 100,000.';
   if (!Number.isFinite(Number(e.budget)) || Number(e.budget) <= 0 || Number(e.budget) > 1e12) return 'Budget must be a positive amount.';
   for (const key of ['expenses', 'tasks', 'vendors', 'guests', 'ideasSaved', 'chat']) if (!Array.isArray(raw[key]) || raw[key].length > 10000) return `${key} must be a list of 10,000 items or fewer.`;
-  for (const x of raw.expenses) if (!cleanText(x.name, 120) || !Number.isFinite(Number(x.planned)) || Number(x.planned) < 0 || !Number.isFinite(Number(x.actual)) || Number(x.actual) < 0) return 'Expense entries need a name and non-negative amounts.';
+  const validId = item => Number.isSafeInteger(Number(item?.id)) && Number(item.id) > 0;
+  for (const x of raw.expenses) if (!validId(x) || !cleanText(x.name, 120) || x.name.length > 120 || typeof x.category !== 'string' || x.category.length > 80 || !Number.isFinite(Number(x.planned)) || Number(x.planned) < 0 || !Number.isFinite(Number(x.actual)) || Number(x.actual) < 0) return 'Expense entries need valid IDs, names, categories, and non-negative amounts.';
   for (const t of raw.tasks) {
-    if (!cleanText(t.title, 180) || !validDate(t.due) || t.due > e.date) return 'Tasks need a title and a due date on or before the event date.';
+    if (!validId(t) || !cleanText(t.title, 180) || t.title.length > 180 || typeof t.category !== 'string' || t.category.length > 80 || !validDate(t.due) || t.due > e.date) return 'Tasks need valid IDs, titles, and a due date on or before the event date.';
     if (!['Not started', 'In progress', 'Completed', 'Blocked'].includes(t.status)) return 'A task has an unsupported status.';
   }
-  for (const v of raw.vendors) if (!cleanText(v.name, 160) || !Number.isFinite(Number(v.quote)) || Number(v.quote) < 0) return 'Vendor entries need a name and non-negative quote.';
-  for (const g of raw.guests) if (!cleanText(g.name, 160) || !['Pending', 'Yes', 'No'].includes(g.rsvp)) return 'Guest entries need a name and valid RSVP.';
+  for (const v of raw.vendors) if (!validId(v) || !cleanText(v.name, 160) || v.name.length > 160 || typeof v.category !== 'string' || v.category.length > 80 || !Number.isFinite(Number(v.quote)) || Number(v.quote) < 0) return 'Vendor entries need valid IDs, names, categories, and non-negative quotes.';
+  for (const g of raw.guests) if (!validId(g) || !cleanText(g.name, 160) || g.name.length > 160 || typeof g.contact !== 'string' || g.contact.length > 240 || typeof g.category !== 'string' || g.category.length > 80 || typeof g.dietary !== 'string' || g.dietary.length > 240 || !['Pending', 'Yes', 'No'].includes(g.rsvp)) return 'Guest entries need valid IDs, names, and RSVP values.';
   return null;
 }
 app.get('/api/workspace', requireAuth, (req, res) => {

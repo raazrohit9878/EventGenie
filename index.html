@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#mainContent">Skip to main content</a>
   <div class="app-shell">
     <aside class="sidebar" id="sidebar">
       <a class="brand" href="#home" aria-label="EventGenie home"><span class="brand-mark">✳</span><span>eventgenie<span class="brand-ai">AI</span></span></a>
@@ -29,15 +30,15 @@
         <div class="profile"><div class="avatar">P</div><div class="profile-copy"><strong>Priya Sharma</strong><small>Demo workspace</small></div><button class="icon-button" title="Profile settings" id="profileBtn">•••</button></div>
       </div>
     </aside>
-    <main class="main-area">
-      <header class="topbar"><button class="mobile-menu icon-button" id="menuBtn" aria-label="Open menu">☰</button><div class="breadcrumb">My workspace <span>/</span> <strong id="crumb">Overview</strong></div><div class="top-actions"><span class="demo-badge" id="storageBadge"><span></span> Local demo</span><button class="icon-button notification-button" id="notificationsBtn" aria-label="Notifications">♧<i></i></button><div class="avatar small" id="topAvatar">P</div></div></header>
+    <main class="main-area" id="mainContent" tabindex="-1">
+      <header class="topbar"><button class="mobile-menu icon-button" id="menuBtn" aria-label="Open menu" aria-controls="sidebar" aria-expanded="false">☰</button><div class="breadcrumb">My workspace <span>/</span> <strong id="crumb">Overview</strong></div><div class="top-actions"><span class="demo-badge" id="storageBadge"><span></span> Local demo</span><button class="icon-button notification-button" id="notificationsBtn" aria-label="Notifications">♧<i></i></button><div class="avatar small" id="topAvatar" aria-hidden="true">P</div></div></header>
       <section class="page-content" id="pageContent"></section>
     </main>
   </div>
-  <button class="chat-fab" id="chatFab" aria-label="Open EventGenie chat" aria-expanded="false">✳<span>Chat with Genie</span></button>
+  <button class="chat-fab" id="chatFab" aria-label="Open EventGenie chat" aria-controls="chatWidget" aria-expanded="false">✳<span>Chat with Genie</span></button>
   <section class="chat-widget" id="chatWidget" role="dialog" aria-label="EventGenie AI chat" aria-modal="false" hidden>
     <header class="chat-widget-head"><div class="chat-brand-icon">✳</div><div><strong>Genie, your event planner</strong><small id="chatWidgetStatus">AI powered by NVIDIA NIM</small></div><div class="chat-widget-actions"><button class="icon-button" id="clearChatBtn" title="Clear conversation" aria-label="Clear conversation">⌫</button><button class="icon-button" id="closeChatBtn" title="Close chat" aria-label="Close chat">✕</button></div></header>
-    <div class="chat-widget-messages" id="widgetMessages" aria-live="polite"></div>
+    <div class="chat-widget-messages" id="widgetMessages" role="log" aria-label="Conversation with Genie" aria-live="polite" aria-relevant="additions" aria-atomic="false"></div>
     <div class="chat-quick-prompts"><button data-prompt="What tasks are pending?">Pending tasks</button><button data-prompt="Suggest three wedding themes">Wedding themes</button></div>
     <div class="chat-error-area" id="widgetChatError" role="alert" aria-live="assertive"></div>
     <form class="chat-compose widget-compose"><input class="chat-input" placeholder="Ask about your event…" autocomplete="off" aria-label="Message EventGenie AI"><button class="primary-button" aria-label="Send message">↑</button></form>

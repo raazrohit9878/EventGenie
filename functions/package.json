@@ -1,0 +1,22 @@
+{
+  "name": "eventgenie-functions",
+  "description": "EventGenie AI Cloud Functions Backend",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "better-sqlite3": "^12.2.0",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "firebase-admin": "^13.1.0",
+    "firebase-functions": "^6.3.0",
+    "helmet": "^8.1.0"
+  },
+  "private": true
+}
